@@ -6,3 +6,84 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<ul id="myUl"></ul>
+
+
+@section Scripts{
+        <script>
+         ////   $('.display-4').text('Welcome Section!!');
+         //   const emps = [{"name":"Tom","workYears":3,"salary":35000},
+         //                {"name":"Jack","workYears":5,"salary":40000},
+         //                {"name":"Mary","workYears":7,"salary":45000}];
+
+         // //讀取JSON資料
+         // // [ 0,1,2] => 陣列，透過 Index 讀取資料
+         // //{屬性:屬性值,key:value} => 物件.屬性 => 屬性值
+         //   //console.log(emps[1]);  //{"name":"Jack","workYears":5,"salary":40000}
+         //   //console.log(emps[1].name);  //Jack
+         //   //console.log(emps[1].salary);  //40000
+         //   for(let i=0,max=emps.length;i<max;i++){
+         //       console.log(emps[i].name);
+         //       console.log(emps[i].workYears);
+         //       console.log(emps[i].salary);
+         //   }
+
+            const emp = {
+                "employees": [
+                    { "name": "Tom", "workYears": 3, "salary": 35000 },
+                    { "name": "Jack", "workYears": 5, "salary": 40000 },
+                    { "name": "Mary", "workYears": 7, "salary": 45000 }
+                ]
+            };
+
+            //console.log(emp); //{employees:[ ]}
+            //console.log(emp.employees);
+            //const theUl = document.querySelector('#myUl');
+
+
+            //           for(let i=0,max=emp.employees.length;i<max;i++){
+            //               const { name, workYears, salary } = emp.employees[i];
+            //            //console.log(name);
+            //            //console.log(workYears);
+            //            //console.log(salary);
+
+            //            //資料的顯示  DOM
+            //            //建立 li 元素節點 <li>
+            //            const eleLi = document.createElement('li');
+
+            //            //建立文字節點 name
+            //            const txtLi = document.createTextNode(name);
+
+            //            //將文字節點加到元素節點中 <li>name</li>
+            //            eleLi.appendChild(txtLi);
+
+            //            //將li加到ul中 <ul><li></ul>
+            //    theUl.appendChild(eleLi);
+
+            //        }
+
+            //emp.employees.forEach((value, index, array)=>{
+            //    const { name, workYears, salary } =value;
+            //    console.log(name);
+            //})
+
+
+            const theUl = document.querySelector('#myUl');
+            let datas = emp.employees.map((emp, index, array)=>{
+                const { name, workYears, salary } =emp;
+                return ( `<li>${name} - ${salary}</li>` );
+            })
+
+            theUl.innerHTML = datas.join("");
+
+
+
+        </script>
+}
+
+    @section Styles{
+        <style>
+        h1 {
+            background-color: lightgreen
+            }</style>
+}

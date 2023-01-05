@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "作業1";
+}
+
+<h1>作業1</h1>
+
+<div class="d-flex flex-wrap" id="addUI">
+
+@*<div class="card m-3" style="width: 18rem;"> 
+  <div class="card-body">
+    <h5 class="card-title">Card title</h5>
+    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">An item</li>   
+  </ul>
+  <div class="card-body">
+    <a href="#" class="btn btn-primary">Card link</a>    
+  </div>
+</div>*@
+
+</div>
+
+@section Scripts{
+     <script src="~/js/travel.js"></script>
+     <script>
+        //let datas=DATAS[0].Name;
+        //console.log(datas);
+            const theUl = document.querySelector('#addUI');
+            let datas = DATAS.map((value, index, array)=>{
+                    const { Name, Toldescribe,Add, TYWebsite } =value;
+                        return ( `<div class="card m-3" style="width: 18rem;"> 
+                                      <div class="card-body">
+                                        <h5 class="card-title">${Name}</h5>
+                                        <p class="card-text">${Toldescribe}</p>
+                                      </div>
+                                      <ul class="list-group list-group-flush">
+                                        <li class="list-group-item">${Add}</li>   
+                                      </ul>
+                                      <div class="card-body">
+                                        <a href="${TYWebsite}" class="btn btn-primary">前往官網</a>    
+                                      </div>
+                                  </div>` );
+            })
+          theUl.innerHTML = datas.join("");
+
+     </script>
+}

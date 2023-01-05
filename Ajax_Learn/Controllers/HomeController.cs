@@ -17,7 +17,10 @@ namespace Ajax_Learn.Controllers
         {
             return View();
         }
-
+        public IActionResult fAjax()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();
