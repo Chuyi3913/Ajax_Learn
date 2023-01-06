@@ -38,29 +38,31 @@
 
             //console.log(emp); //{employees:[ ]}
             //console.log(emp.employees);
-            //const theUl = document.querySelector('#myUl');
 
+            const theUl = document.querySelector('#myUl');
+            const docFrag=document.createDocumentFragment();
 
-            //           for(let i=0,max=emp.employees.length;i<max;i++){
-            //               const { name, workYears, salary } = emp.employees[i];
-            //            //console.log(name);
-            //            //console.log(workYears);
-            //            //console.log(salary);
+                       for(let i=0,max=emp.employees.length;i<max;i++){
+                           const { name, workYears, salary } = emp.employees[i];
+                        //console.log(name);
+                        //console.log(workYears);
+                        //console.log(salary);
 
-            //            //資料的顯示  DOM
-            //            //建立 li 元素節點 <li>
-            //            const eleLi = document.createElement('li');
+                        //資料的顯示  DOM
+                        //建立 li 元素節點 <li>
+                        const eleLi = document.createElement('li');
 
-            //            //建立文字節點 name
-            //            const txtLi = document.createTextNode(name);
+                        //建立文字節點 name
+                        const txtLi = document.createTextNode(name);
 
-            //            //將文字節點加到元素節點中 <li>name</li>
-            //            eleLi.appendChild(txtLi);
+                        //將文字節點加到元素節點中 <li>name</li>
+                        eleLi.appendChild(txtLi);
 
-            //            //將li加到ul中 <ul><li></ul>
-            //    theUl.appendChild(eleLi);
-
-            //        }
+                        //將li加到空節點上，可以提升效能
+                        docFrag.appendChild(eleLi);
+                    }
+                        //將li加到ul中 <ul><li></ul>
+                         theUl.appendChild(docFrag);
 
             //emp.employees.forEach((value, index, array)=>{
             //    const { name, workYears, salary } =value;
@@ -68,13 +70,13 @@
             //})
 
 
-            const theUl = document.querySelector('#myUl');
-            let datas = emp.employees.map((emp, index, array)=>{
-                const { name, workYears, salary } =emp;
-                return ( `<li>${name} - ${salary}</li>` );
-            })
+            //const theUl = document.querySelector('#myUl');
+            //let datas = emp.employees.map((emp, index, array)=>{
+            //    const { name, workYears, salary } =emp;
+            //    return ( `<li>${name} - ${salary}</li>` );
+            //})
 
-            theUl.innerHTML = datas.join("");
+            //theUl.innerHTML = datas.join("");
 
 
 

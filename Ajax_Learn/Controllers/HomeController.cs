@@ -7,10 +7,12 @@ namespace Ajax_Learn.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly DemoContext  _db;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger,DemoContext db)
         {
             _logger = logger;
+            _db =db;
         }
 
         public IActionResult Index()
@@ -21,6 +23,13 @@ namespace Ajax_Learn.Controllers
         {
             return View();
         }
+        public IActionResult Text()
+        {
+            var q = from m in _db.Members
+                    select m;
+            return View(q);
+        }
+
         public IActionResult Privacy()
         {
             return View();
