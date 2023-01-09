@@ -14,7 +14,7 @@ namespace Ajax_Learn.Controllers
         {
             return View();
         }
-        public IActionResult 驗證(Member m)
+        public IActionResult verify(Member m)
         {
             if (m.Name == null)
                 m.Name = "";
