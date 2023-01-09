@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Ajax_Learn.Models;
+using Microsoft.AspNetCore.Mvc;
+using System.Text;
 
 namespace Ajax_Learn.Controllers
 {
@@ -11,6 +13,12 @@ namespace Ajax_Learn.Controllers
         public IActionResult 作業2()
         {
             return View();
+        }
+        public IActionResult 驗證(Member m)
+        {
+            if (m.Name == null)
+                m.Name = "";
+            return Content(m.Name, "text/html", Encoding.UTF8);
         }
         public IActionResult 作業3()
         {

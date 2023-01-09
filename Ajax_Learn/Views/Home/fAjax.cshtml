@@ -5,7 +5,7 @@
 
 <h1>fAjax</h1>
 
-<input type="text" id="text1" />
+<input type="text" id="text1" value=""/>
 <button class="btn btn-primary" id="button1">Click</button>
 <div id="div1" class="alert-info mt-3 p-3 w-25">aaaaa</div>
 
@@ -14,8 +14,8 @@
             const btn = document.querySelector('#button1');
             const theDiv = document.querySelector('#div1');
             const txt = document.querySelector('#text1');
-            btn.addEventListener('click',()=>{
 
+            btn.addEventListener('click',()=>{
 
                //步驟一建立Ajax物件
                const xhr = new XMLHttpRequest();
@@ -30,8 +30,12 @@
 
                //步驟二發出要求
                //open("Http Method(GET、POST、PUT、DELETE)", "伺服器端的程式", 同步或非同步(預設))
-                xhr.open("GET", `/api/index?name=${txt.value}`);
-               xhr.send();
+               //專案在佈署到網頁上時Url的表示方式會改變,需使用其他方式
+                //xhr.open("GET", `/api/index?name=${txt.value}`);
+                //@Url.Action("index","api","name=${txt.value}");
+                //@Url.Content("~/api/index?name=${txt.value}");
+                xhr.open("GET", `@Url.Content("~/api/index?name=${txt.value}")`);
+                xhr.send();
 
             })
         </script>

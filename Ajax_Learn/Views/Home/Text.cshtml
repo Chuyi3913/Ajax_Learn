@@ -27,9 +27,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.FileName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FileData)
-            </th>
+          
             <th></th>
         </tr>
     </thead>
@@ -49,14 +47,11 @@
                 @Html.DisplayFor(modelItem => item.Age)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FileName)
+                    <img src="~/photos/@item.FileName" width="128" />
             </td>
+           
             <td>
-                @Html.DisplayFor(modelItem => item.FileData)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |                
                 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>

@@ -4,7 +4,15 @@
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    <div class="btn-group" role="group" aria-label="Basic outlined example">
+        @Html.ActionLink("index","index","home","",new{@class="btn btn-outline-primary"})
+        @Html.ActionLink("fAjax","fAjax","home","",new{@class="btn btn-outline-primary"})
+        @Html.ActionLink("pAjax","pAjax","home","",new{@class="btn btn-outline-primary"})
+        @Html.ActionLink("text","text","home","",new{@class="btn btn-outline-primary"})
+        @Html.ActionLink("fetch","fetch","home","",new{@class="btn btn-outline-primary"})
+        @Html.ActionLink("json","json","home","",new{@class="btn btn-outline-primary"})
+    </div>    
 </div>
 <ul id="myUl"></ul>
 

@@ -5,3 +5,52 @@
 
 <h1>作業2</h1>
 
+<div class="d-flex">
+    <form method="post" name="formUser" class="w-50">
+            <div class="mb-3 w-75">
+            <label for="Name" class="form-label">姓名</label>
+            <input type="text" name="Name" id="Name" class="form-control" placeholder="請輸入姓名" />
+            <div class="d-inline" id="alert"></div>
+            <button id="btn" name="btn" class="btn btn-light btn-sm mt-2">檢查可用性</button>
+    </div>
+        <div class="mb-3 w-75">
+        <label for="Email" class="form-label">Email</label>
+        <input type="email" name="Email" id="Email" class="form-control" placeholder="name@example.com" />
+    </div>
+        <div class="mb-3 w-75">
+        <label for="Age" class="form-label">年齡</label>
+        <input type="text" name="Age" id="Age" class="form-control" placeholder="請輸入年齡" />
+    </div>
+        <div class="mb-3 w-75">
+        <label for="fileForm" class="form-label">照片上傳</label>
+        <input type="file" name="photo" id="fileForm" class="form-control" />
+    </div>
+    <div class="mb-3 w-75">
+        <input type="button" value="送出" class="btn btn-primary mb-3" />
+    </div>
+</form>
+
+    <div class="w-50" id="div1"></div>
+
+</div>
+
+@section Scripts{
+    <script>
+        let btn = document.querySelector("#btn");
+        let span = document.querySelector("#alert");       
+        btn.addEventListener("click", (event) => {
+            event.preventDefault();
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData(document.formUser);
+
+            xhr.addEventListener('load', () => {     
+                const data = xhr.responseText;
+                span.innerHTML = data;
+            })
+
+            xhr.open("POST", `@Url.Content("~/作業/驗證")`)
+            xhr.send(formData);
+
+        });
+    </script>
+}

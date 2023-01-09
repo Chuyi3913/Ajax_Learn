@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewData["Title"] = "fetch";
+}
+
+<h1>fetch</h1>
+ <input type="text" id="text1" value="aa" />
+ <button class="btn btn-primary" id="button1">Click</button>
+ <div id="div1" class="alert-info mt-3 p-3 w-25">Enter</div>
+
+
+@section Scripts{
+    <script>
+        const btn = document.querySelector('#button1');
+        const theDiv = document.querySelector('#div1');
+        const txt = document.querySelector('#text1');
+
+        fetch(`@Url.Content("~/api/index?name=${txt.value}")`).then(response => response.text())
+        .then(data=>{
+              theDiv.innerHTML = `<h2>${data}</h2>`
+        });
+    </script>
+}

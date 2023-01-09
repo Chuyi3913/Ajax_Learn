@@ -23,6 +23,19 @@ namespace Ajax_Learn.Controllers
         {
             return View();
         }
+        public IActionResult pAjax()
+        {
+            return View();
+        }
+        public IActionResult json()
+        {
+            return View();
+        }
+        public IActionResult fetch()
+        {
+            return View();
+        }
+
         public IActionResult Text()
         {
             var q = from m in _db.Members

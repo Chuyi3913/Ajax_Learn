@@ -51,7 +51,7 @@ namespace Ajax_Learn.Models
 
             modelBuilder.Entity<Member>(entity =>
             {
-                entity.Property(e => e.MemberId).ValueGeneratedNever();
+                entity.HasKey(e => e.MemberId);
 
                 entity.Property(e => e.Email).HasMaxLength(200);
 

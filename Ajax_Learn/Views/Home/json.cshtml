@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewData["Title"] = "json";
+}
+
+<h1>json</h1>
+<select id="city" class="form-select form-select-lg mb-3"></select>
+<select id="site" class="form-select form-select-lg mb-3"></select>
+<select id="road" class="form-select form-select-lg mb-3"></select>
+
+
+@section Scripts{
+    <script>
+        var city, site;
+        document.querySelector("#city").addEventListener("change",selected)
+        document.querySelector("#site").addEventListener("change", selected)
+        document.querySelector("#road").addEventListener("change", selected)
+        function selected(){
+            city=this.value;
+            site=this.value;
+        }
+        function city(){
+            const xhr=new XMLHttpRequest();
+            const thUI=document.querySelector("#city");
+            xhr.addEventListener("load",()=>{
+                const datas = JSON.parse(xhr.responseText);  
+                const opcities = datas.map((value, index, array) => {
+                    const { city } = value;
+                    return (`<option value="${city}">${city}</option>`);
+                })
+                thUI.innerHTML=opcities.join("");
+            })
+            
+            xhr.open('GET', "@Url.Content("~/api/city")")
+            xhr.send();
+        }
+        function site() {
+            const xhr = new XMLHttpRequest();
+            const thUI = document.querySelector("#site");
+            xhr.addEventListener("load", () => {
+                const datas = JSON.parse(xhr.responseText);
+                const opcities = datas.map((value, index, array) => {
+                    const { SiteId } = value;
+                    return (`<option value="${SiteId}">${SiteId}</option>`);
+                })
+                thUI.innerHTML = opcities.join("");
+            })
+            xhr.open('GET', `@Url.Content("~/api/site?city=${city}")`)
+            xhr.send();
+        }
+        function road() {
+            const xhr = new XMLHttpRequest();
+            const thUI = document.querySelector("#road");
+            xhr.addEventListener("load", () => {
+                const datas = JSON.parse(xhr.responseText);
+                const opcities = datas.map((value, index, array) => {
+                    const { Road } = value;
+                    return (`<option value="${Road}">${Road}</option>`);
+                })
+                thUI.innerHTML = opcities.join("");
+            })
+            xhr.open('GET', `@Url.Content("~/api/road?site=${site}")`)
+            xhr.send();
+        }
+    </script>
+}
