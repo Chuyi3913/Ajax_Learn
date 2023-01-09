@@ -10,8 +10,8 @@
             <div class="mb-3 w-75">
             <label for="Name" class="form-label">姓名</label>
             <input type="text" name="Name" id="Name" class="form-control" placeholder="請輸入姓名" />
-            <div class="d-inline" id="alert"></div>
-            <button id="btn" name="btn" class="btn btn-light btn-sm mt-2">檢查可用性</button>
+            <div id="alert" class="mt-2"></div>
+            <button id="btn1" class="btn btn-light btn-sm mt-2">檢查可用性</button>
     </div>
         <div class="mb-3 w-75">
         <label for="Email" class="form-label">Email</label>
@@ -26,7 +26,7 @@
         <input type="file" name="photo" id="fileForm" class="form-control" />
     </div>
     <div class="mb-3 w-75">
-        @*<input type="button" value="送出" class="btn btn-primary mb-3" />*@
+        <input id="btn2" type="button" value="送出" class="btn btn-primary mb-3" />
     </div>
 </form>
 
@@ -36,21 +36,42 @@
 
 @section Scripts{
     <script>
-        let btn = document.querySelector("#btn");
-        let span = document.querySelector("#div1");
-        btn.addEventListener("click", (event) => {
+        let btn = document.querySelector('#btn1');
+        let sub = document.querySelector('#btn2');
+        let remind = document.querySelector("#alert");
+        let info = document.querySelector("#div1");
+        btn.addEventListener("click", verify);
+        sub.addEventListener("click", submit);
+
+        function verify(event){
+             event.preventDefault();
+            var xhr = new XMLHttpRequest();
+            var formData = new FormData(document.formUser);
+
+            xhr.addEventListener('load', () => {     
+                const data = xhr.responseText;
+                remind.innerHTML = data;
+            })
+
+            //須注意controller和action不能是中文不然會找不到檔案
+            xhr.open("post", `@Url.Content("~/HWAPI/verify")`)
+            xhr.send(formData);
+        };
+
+        function submit(event){
+            verify(event);
             event.preventDefault();
             var xhr = new XMLHttpRequest();
             var formData = new FormData(document.formUser);
 
             xhr.addEventListener('load', () => {     
                 const data = xhr.responseText;
-                span.innerHTML = data;
+                info.innerHTML = data;
             })
-
-            xhr.open("POST", `@Url.Content("~/作業/verify")`)
+                       
+            xhr.open("post", `@Url.Content("~/HWAPI/create")`)
             xhr.send(formData);
+        };
 
-        });
     </script>
 }

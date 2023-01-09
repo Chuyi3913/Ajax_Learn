@@ -14,12 +14,7 @@ namespace Ajax_Learn.Controllers
         {
             return View();
         }
-        public IActionResult verify(Member m)
-        {
-            if (m.Name == null)
-                m.Name = "";
-            return Content(m.Name, "text/html", Encoding.UTF8);
-        }
+       
         public IActionResult 作業3()
         {
             return View();
