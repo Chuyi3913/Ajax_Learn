@@ -4,4 +4,64 @@
 }
 
 <h1>作業3</h1>
+<select id="select1" class="form-select form-select-lg mb-3"></select>
+<select id="select2" class="form-select form-select-lg mb-3"></select>
+<select id="select3" class="form-select form-select-lg mb-3"></select>
 
+
+@section Scripts{
+    <script>
+          const cities=document.querySelector('#select1');
+          const sites=document.querySelector('#select2');
+          const roads=document.querySelector('#select3');
+
+          cities.addEventListener('change',asyncFun)
+          sites.addEventListener('change',asyncFun);
+
+          asyncFun();    
+
+          //改用async await語法
+          async function asyncFun(){ 
+              const responseCity=await asyncCity();              
+              //console.log(responseCity);
+              const responseSite=await asyncSite(responseCity);
+              const responseRoad=await asyncRoad(responseSite);
+          }
+
+          //以下為生成選項的function
+          async function asyncCity(){ 
+            const response = await fetch("@Url.Content("~/HWAPI/City")");        
+            const datas = JSON.parse(await response.text());                
+            const opcities = datas.map(value => {
+                    const { city } = value;
+                    return (`<option value="${city}">${city}</option>`);
+                })
+                cities.innerHTML=opcities.join("");
+                const city=cities.options[cities.selectedIndex].value;
+                //console.log(city);
+                return city;                
+          };
+          async function asyncSite(city){  
+            const response = await fetch(`@Url.Content("~/HWAPI/Site?city=${city}")`);        
+            const datas = JSON.parse(await response.text());      
+            //console.log(datas);
+            const opcities = datas.map(value => {
+                    const { siteId } = value; //這邊好像要依據資料表的欄位名稱，大小寫有差。
+                    return (`<option value="${siteId}">${siteId}</option>`);
+                })
+                sites.innerHTML=opcities.join("");
+                const site = sites.options[sites.selectedIndex].value;
+                console.log(site);
+                return site;
+          }          
+          async function asyncRoad(site){ 
+            const response = await fetch(`@Url.Content("~/HWAPI/Road?site=${site}")`);        
+            const datas = JSON.parse(await response.text());           
+            const opcities = datas.map(value => {
+                    const { road } = value;
+                    return (`<option value="${road}">${road}</option>`);
+                })
+                roads.innerHTML=opcities.join("");
+          }
+    </script>
+}

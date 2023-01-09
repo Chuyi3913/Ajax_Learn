@@ -15,6 +15,8 @@ namespace Ajax_Learn.Controllers
             _host = host;
         }
 
+        #region//作業2
+        static bool a=false;
         public IActionResult verify(Member m)
         {
             string s = "";
@@ -38,6 +40,7 @@ namespace Ajax_Learn.Controllers
                     s = $@"<div class='alert-success'>";
                     s += "可以使用";
                     s += $@"</div>";
+                    a=true;
                 }
             }
             return Content(s,"text/html", Encoding.UTF8);
@@ -45,11 +48,9 @@ namespace Ajax_Learn.Controllers
         public IActionResult Create(Member m, IFormFile photo)
         {
             string s = "";
-            if (m.Name==null || m.Email==null || m.Age==null)
+            if (m.Name==null || m.Email==null || m.Age==null || !a)
             {
-                s = "資料請填寫完畢";
-                //string path = Path.Combine(_host.WebRootPath, "photos", "OIP.jpg");
-                //System.IO.File.Delete(path);
+                s = "資料有誤或未填寫完畢";         
             }
             else
             {
@@ -70,7 +71,8 @@ namespace Ajax_Learn.Controllers
                     if (System.IO.File.Exists(oldPath))
                         System.IO.File.Delete(oldPath);
                     //存放檔案(圖片)路徑
-                    string photoName = Guid.NewGuid().ToString() + ".png"; //圖片名稱用Guid方法取代
+                    //圖片名稱用Guid方法取代
+                    string photoName = Guid.NewGuid().ToString() + ".png"; 
                     string path = Path.Combine(_host.WebRootPath, "photos", photoName);
                     using (var filesStream = new FileStream(path, FileMode.Create))
                     {
@@ -79,7 +81,7 @@ namespace Ajax_Learn.Controllers
                     m.FileName = photoName;
 
                     //以下只是檔案資訊，不一定要傳
-                    s += $"<li class=\"list-group-item\">檔案名稱:{photoName}</li>";
+                    s += $"<li class=\"list-group-item\">檔案名稱:{photo.FileName}</li>";
                     float len = Convert.ToInt32(photo.Length) / 1024;
                     string data = len.ToString("###,##0.00");
                     s += $"<li class=\"list-group-item\">檔案大小:{data}KB</li>";
@@ -88,9 +90,37 @@ namespace Ajax_Learn.Controllers
                 s += "</ul>";
                 _db.Add(m);
                 _db.SaveChanges();
-            }
+                a = false;
+            }           
             return Content(s, "text/html", Encoding.UTF8);
         }
+        #endregion
 
+        #region//作業3
+        public IActionResult City()
+        {
+            var cities = _db.Addresses.Select(e => new
+            {
+                e.City,
+            }).Distinct();
+            return Json(cities);
+        }
+        public IActionResult Site(string city)
+        {
+            var sites = _db.Addresses.Where(e => e.City == city).Select(e => new
+            {
+                e.SiteId,
+            }).Distinct();
+            return Json(sites);
+        }
+        public IActionResult Road(string site)
+        {
+            var roads = _db.Addresses.Where(e => e.SiteId == site).Select(e => new
+            {
+                e.Road,
+            }).Distinct();
+            return Json(roads);
+        }
+        #endregion
     }
 }

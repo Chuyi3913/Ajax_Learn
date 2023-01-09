@@ -21,7 +21,17 @@
 </div>*@
 
 </div>
-
+@section Styles{
+    <style>
+       .commitext{
+         display:-webkit-box;
+         -webkit-line-clamp: 7; 
+         -webkit-box-orient: vertical;
+         overflow:hidden;
+         max-height:50%;
+       }
+    </style>
+}
 @section Scripts{
      <script src="~/js/travel.js"></script>
      <script>
@@ -30,15 +40,15 @@
             const theUl = document.querySelector('#addUI');
             let datas = DATAS.map((value, index, array)=>{
                     const { Name, Toldescribe,Add, TYWebsite } =value;
-                        return ( `<div class="card m-3" style="width: 18rem;"> 
-                                      <div class="card-body">
+                        return ( `<div class="card border-warning m-3" style="width: 18rem; height:25rem"> 
+                                      <div class="card-body commitext card-height">
                                         <h5 class="card-title">${Name}</h5>
                                         <p class="card-text">${Toldescribe}</p>
                                       </div>
                                       <ul class="list-group list-group-flush">
                                         <li class="list-group-item">${Add}</li>   
                                       </ul>
-                                      <div class="card-body">
+                                      <div class="card-footer" style="max-height:15%">
                                         <a href="${TYWebsite}" class="btn btn-primary">前往官網</a>    
                                       </div>
                                   </div>` );
