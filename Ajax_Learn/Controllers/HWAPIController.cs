@@ -16,41 +16,26 @@ namespace Ajax_Learn.Controllers
         }
 
         #region//作業2
-        static bool a=false; //這裡static變數應該改成session
+       
         public IActionResult verify(Member m)
         {
             string s = "";
             if (m.Name == null)
-            {
-                s = $@"<div class='alert-danger'>";
-                s += "請輸入姓名";
-                s += $@"</div>";
-                a = false;
-            }
+                s = "null";
             else
             {
                 var datas = _db.Members.FirstOrDefault(t => t.Name == m.Name);
                 if (datas != null)
-                {
-                    s = $@"<div class='alert-danger'>";
-                    s += "此姓名已有人";
-                    s += $@"</div>";
-                    a=false;
-                }
+                    s = "false";                    
                 else
-                {
-                    s = $@"<div class='alert-success'>";
-                    s += "可以使用";
-                    s += $@"</div>";
-                    a=true;
-                }
+                    s = "true";
             }
             return Content(s,"text/html", Encoding.UTF8);
         }
         public IActionResult Create(Member m, IFormFile photo)
         {
-            string s = "";       
-            if (m.Name==null || m.Email==null || m.Age==null || !a)
+            string s = "";    //這邊如果回傳Json可以把標籤寫在Ajax
+            if (m.Name==null || m.Email==null || m.Age==null)
             {
                 s = "資料有誤或未填寫完畢";         
             }
@@ -85,10 +70,9 @@ namespace Ajax_Learn.Controllers
                     s += $"<li class=\"list-group-item\">檔案大小:{data}KB</li>";
                     s += $"<li class=\"list-group-item\">檔案類型:{photo.ContentType}</li>";
                 }
-                s += "</ul>";
+                s += "</ul></div>";
                 _db.Add(m);
-                _db.SaveChanges();
-                a = false;
+                _db.SaveChanges();              
             }           
             return Content(s, "text/html", Encoding.UTF8);
         }

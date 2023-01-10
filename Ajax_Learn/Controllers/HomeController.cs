@@ -36,13 +36,16 @@ namespace Ajax_Learn.Controllers
             return View();
         }
 
-        public IActionResult Text()
+        public IActionResult DataMember()
         {
             var q = from m in _db.Members
                     select m;
             return View(q);
         }
-
+        public IActionResult jQuery()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

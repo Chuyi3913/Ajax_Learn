@@ -11,7 +11,7 @@
             <label for="Name" class="form-label">姓名</label>
             <input type="text" name="Name" id="Name" class="form-control" placeholder="請輸入姓名" />
             <div id="alert" class="mt-2"></div>
-            <button id="btn1" class="btn btn-light btn-sm mt-2">檢查可用性</button>
+            <button id="btn1" type="button" class="btn btn-light btn-sm mt-2">檢查可用性</button>
     </div>
         <div class="mb-3 w-75">
         <label for="Email" class="form-label">Email</label>
@@ -40,17 +40,30 @@
         let sub = document.querySelector('#btn2');
         let remind = document.querySelector("#alert");
         let info = document.querySelector("#div1");
+        let result="";
         btn.addEventListener("click", verify);
         sub.addEventListener("click", submit);
 
-        function verify(event){
-             event.preventDefault();
+        function verify(){             
             var xhr = new XMLHttpRequest();
             var formData = new FormData(document.formUser);
 
-            xhr.addEventListener('load', () => {     
-                const data = xhr.responseText;
-                remind.innerHTML = data;
+            xhr.addEventListener('load', () => {
+                result = xhr.responseText;                
+                let thDIV="";
+                if (result === "null") {
+                    thDIV = "<div class='alert-danger'>請輸入姓名</div>";
+                }
+                else if (result === "false") {
+                    thDIV = "<div class='alert-danger'>此姓名已有人</div>";
+                }
+                else if (result === "true") {
+                    thDIV = "<div class='alert-success'>可以使用</div>";
+                }
+                else{
+                    thDIV = "<div class='alert-danger'>發生錯誤</div>";
+                }
+                remind.innerHTML = thDIV;
             })
 
             //須注意controller和action不能是中文不然會找不到檔案
@@ -58,9 +71,8 @@
             xhr.send(formData);
         };
 
-        function submit(event){
-            verify(event);
-            event.preventDefault();
+        function submit(){
+            if (result === "true"){
             var xhr = new XMLHttpRequest();
             var formData = new FormData(document.formUser);
 
@@ -71,6 +83,10 @@
                        
             xhr.open("post", `@Url.Content("~/HWAPI/create")`)
             xhr.send(formData);
+            }
+            else{
+                info.innerHTML = "請先驗證姓名";
+            }
         };
 
     </script>

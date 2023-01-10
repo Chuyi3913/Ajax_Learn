@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewData["Title"] = "jQuery";
+}
+
+<h1>jQuery</h1>
+<button id="buttonGet" class="btn btn-primary">get</button>
+<button id="buttonPost" class="btn btn-secondary">post</button>
+<button id="buttonJson" class="btn btn-success">getJson</button>
+<button id="buttonLoad" class="btn btn-info">load</button>
+<button id="buttonAjax" class="btn btn-warning">ajax</button>
+<button id="buttonCors" class="btn btn-danger">cors</button>
+<div class="alert alert-dark mt-3 w-50" role="alert" id="divAlert">
+
+</div>
+@section Scripts{
+    <script>
+        $('#buttonGet').click(function () {
+            $.get(`@Url.Content("~/api/index")`,{name:"Eddie"},
+            (data)=>{$("#divAlert").html(`<h3>${data}</h3>`)});
+            $('#divAlert').text("GET");
+        })
+        $('#buttonPost').click(function () {
+            $.post(`@Url.Content("~/api/index")`,{},
+            (data)=>{$("#divAlert").html(`<h3>${data}</h3>`)});
+            $('#divAlert').text("POST")
+        })
+        $('#buttonJson').click(function () {
+            $.getJSON(`@Url.Content("~/api/city")`,{},
+            (datas)=>{
+                var docFrag=$(document.createDocumentFragment());      
+                var row=$("<tr></tr>")
+                $.each(datas,(i,data)=>{                    
+                    var elem=$("<td></td>").text(data.city);
+                    var row=$("<tr></tr>").append(elem);                    
+                    docFrag.append(row);
+                })
+                $("#divAlert").html(docFrag);
+            });
+            //$('#divAlert').text("JSON")
+        })
+        $('#buttonLoad').click(function () {
+            $('#divAlert').text("LOAD")
+        })
+        $('#buttonAjax').click(function () {
+            $('#divAlert').text("AJAX")
+        })
+        $('#buttonCors').click(function () {
+            $('#divAlert').text("CORs")
+        })
+
+    </script>
+}
