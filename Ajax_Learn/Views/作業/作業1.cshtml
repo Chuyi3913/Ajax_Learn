@@ -38,7 +38,8 @@
         //let datas=DATAS[0].Name;
         //console.log(datas);
             const theUl = document.querySelector('#addUI');
-            let datas = DATAS.map((value, index, array)=>{
+            //使用const宣告
+            const datas = DATAS.map((value, index, array)=>{ 
                     const { Name, Toldescribe,Add, TYWebsite } =value;
                         return ( `<div class="card border-warning m-3" style="width: 18rem; height:25rem"> 
                                       <div class="card-body commitext card-height">

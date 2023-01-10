@@ -16,7 +16,7 @@ namespace Ajax_Learn.Controllers
         }
 
         #region//作業2
-        static bool a=false;
+        static bool a=false; //這裡static變數應該改成session
         public IActionResult verify(Member m)
         {
             string s = "";
@@ -25,6 +25,7 @@ namespace Ajax_Learn.Controllers
                 s = $@"<div class='alert-danger'>";
                 s += "請輸入姓名";
                 s += $@"</div>";
+                a = false;
             }
             else
             {
@@ -34,6 +35,7 @@ namespace Ajax_Learn.Controllers
                     s = $@"<div class='alert-danger'>";
                     s += "此姓名已有人";
                     s += $@"</div>";
+                    a=false;
                 }
                 else
                 {
@@ -66,10 +68,6 @@ namespace Ajax_Learn.Controllers
                 //檔案(圖片)存放
                 if (photo != null)
                 {
-                    //如果已經有存過圖片就刪除
-                    string oldPath = Path.Combine(_host.WebRootPath, "photos", photo.FileName);
-                    if (System.IO.File.Exists(oldPath))
-                        System.IO.File.Delete(oldPath);
                     //存放檔案(圖片)路徑
                     //圖片名稱用Guid方法取代
                     string photoName = Guid.NewGuid().ToString() + ".png"; 
