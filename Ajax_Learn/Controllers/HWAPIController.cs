@@ -47,7 +47,7 @@ namespace Ajax_Learn.Controllers
         }
         public IActionResult Create(Member m, IFormFile photo)
         {
-            string s = "";
+            string s = "";       
             if (m.Name==null || m.Email==null || m.Age==null || !a)
             {
                 s = "資料有誤或未填寫完畢";         
