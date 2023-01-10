@@ -24,8 +24,8 @@ namespace Ajax_Learn.Controllers
                 s = "null";
             else
             {
-                var datas = _db.Members.FirstOrDefault(t => t.Name == m.Name);
-                if (datas != null)
+                var datas = _db.Members.Any(t => t.Name == m.Name);
+                if (datas)
                     s = "false";                    
                 else
                     s = "true";
@@ -34,7 +34,8 @@ namespace Ajax_Learn.Controllers
         }
         public IActionResult Create(Member m, IFormFile photo)
         {
-            string s = "";    //這邊如果回傳Json可以把標籤寫在Ajax
+            //這裡如果使用FileReader可以直接在client端預覽，這樣回傳的方程式可以不必像下面這樣
+            string s = "";   
             if (m.Name==null || m.Email==null || m.Age==null)
             {
                 s = "資料有誤或未填寫完畢";         

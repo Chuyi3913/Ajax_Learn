@@ -46,6 +46,11 @@ namespace Ajax_Learn.Controllers
         {
             return View();
         }
+        public IActionResult Partial()
+        {
+            ViewBag.W = "這裡是動態資料";
+            return PartialView();
+        }
         public IActionResult Privacy()
         {
             return View();
