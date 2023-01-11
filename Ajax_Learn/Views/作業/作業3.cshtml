@@ -53,7 +53,7 @@
             const datas = await response.json();
             //console.log(datas);
             const opcities = datas.map(value => {
-                    const { siteId } = value; //這邊好像要依據資料表的欄位名稱，大小寫有差。
+                    const { siteId } = value; //這邊好像要依據Json檔案的物件名稱，大小寫有差。
                     return (`<option value="${siteId}">${siteId}</option>`);
                 })
                 sites.innerHTML=opcities.join("");          

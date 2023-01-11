@@ -15,8 +15,7 @@ namespace Ajax_Learn.Controllers
             _host = host;
         }
 
-        #region//作業2
-       
+        #region//作業2       
         public IActionResult verify(Member m)
         {
             string s = "";
@@ -77,6 +76,10 @@ namespace Ajax_Learn.Controllers
             }           
             return Content(s, "text/html", Encoding.UTF8);
         }
+        #endregion
+
+        #region//作業2更新
+
         #endregion
 
         #region//作業3

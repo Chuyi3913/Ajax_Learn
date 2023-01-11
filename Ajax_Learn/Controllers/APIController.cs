@@ -100,6 +100,11 @@ namespace Ajax_Learn.Controllers
             }).Distinct();
             return Json(roads);
         }
+        public string Mail()
+        {
+            new CsendMail().sendGmail();
+            return "ok";
+        }
 
     }
 }

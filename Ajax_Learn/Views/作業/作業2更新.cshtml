@@ -1,0 +1,98 @@
+﻿
+@{
+    ViewData["Title"] = "作業2更新";
+}
+
+<h1>作業2更新</h1>
+
+
+<div class="d-flex">
+    <form method="post" name="formUser" class="w-50">
+        <div class="mb-3 w-75">
+            <label for="Name" class="form-label">姓名</label>
+            <input type="text" name="Name" id="Name" class="form-control" placeholder="請輸入姓名" />
+            <div id="alert" class="mt-2"></div>
+            <button id="btn1" type="button" class="btn btn-light btn-sm mt-2">檢查可用性</button>
+        </div>
+        <div class="mb-3 w-75">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" name="Email" id="Email" class="form-control" placeholder="name@example.com" />
+        </div>
+        <div class="mb-3 w-75">
+            <label for="Age" class="form-label">年齡</label>
+            <input type="text" name="Age" id="Age" class="form-control" placeholder="請輸入年齡" />
+        </div>
+        <div class="mb-3 w-75">
+            <label for="fileForm" class="form-label">照片上傳</label>
+            <input type="file" name="photo" id="fileForm" class="form-control" />
+        </div>
+        <div class="mb-3 w-75">
+            <input id="btn2" type="button" value="送出" class="btn btn-primary mb-3" />
+        </div>
+    </form>
+
+    <div class="w-50" id="div1"></div>
+
+</div>
+
+@section Scripts{
+    <script>
+        const btn = $('#btn1');
+        const txtname=$("#Name");   //原來jQurey標籤選擇器有分大小寫
+        const sub = $('#btn2');
+        const remind = $("#alert");
+        const info = $("#div1");
+        let result = "";
+        $(btn).on("click", verify);
+        $(txtname).on("blur", verify);
+        $(sub).on("click", submit);
+
+            function verify() {     
+
+            var formData = new FormData(document.formUser);
+            $.ajax({
+                url: `@Url.Content("~/HWAPI/verify")`,
+                type: "POST",               
+                data: formData,
+                dataType:"text",
+                contentType: false, //required
+                processData: false // required
+            }).done((data) => { 
+                result =data;
+                let thDIV = "";
+                if (result === "null") {
+                    thDIV = "<div class='alert-danger'>請輸入姓名</div>";
+                }
+                else if (result === "false") {
+                    thDIV = "<div class='alert-danger'>此姓名已有人</div>";
+                }
+                else if (result === "true") {
+                    thDIV = "<div class='alert-success'>可以使用</div>";
+                }
+                else {
+                    thDIV = "<div class='alert-danger'>發生錯誤</div>";
+                }
+                remind.innerHTML = thDIV;
+            })
+        };
+
+        function submit() {
+            if (result === "true") {
+                var xhr = new XMLHttpRequest();
+                var formData = new FormData(document.formUser);
+
+                xhr.addEventListener('load', () => {
+                    const data = xhr.responseText;
+                    info.innerHTML = data;
+                })
+
+                xhr.open("post", `@Url.Content("~/HWAPI/create")`)
+                xhr.send(formData);
+            }
+            else {
+                info.innerHTML = "請先驗證姓名";
+            }
+        };
+
+    </script>
+}
