@@ -10,15 +10,20 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//建立Database Demo的dbContext
 builder.Services.AddDbContext<DemoContext>(
  options => options.UseSqlServer(
  builder.Configuration.GetConnectionString(@"DemoConnection")
 ));
 
+//建立資料可以序列化成xml的方法
+builder.Services.AddControllers().AddXmlSerializerFormatters();
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Allow",
-    builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+    builder => builder.WithOrigins("*").WithHeaders("*").WithMethods("*"));
 });
 
 var app = builder.Build();

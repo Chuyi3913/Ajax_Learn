@@ -21,6 +21,7 @@ namespace Core_Api_Learn.Controllers
         }
 
         // GET: api/Members
+        //[HttpGet("get.{format}"),FormatFilter]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Member>>> GetMembers()
         {

@@ -51,6 +51,10 @@ namespace Ajax_Learn.Controllers
             ViewBag.W = "這裡是動態資料";
             return PartialView();
         }
+        public IActionResult ShipperCors()
+        {
+            return View();
+        }
         public IActionResult Privacy()
         {
             return View();

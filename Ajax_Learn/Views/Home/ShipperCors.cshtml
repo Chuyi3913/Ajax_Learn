@@ -1,0 +1,161 @@
+﻿
+@{
+    ViewData["Title"] = "MemberCors";
+}
+
+@section Styles{
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+}
+
+<h1>MemberCors</h1>
+<button id="buttonAdd" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+    <i class="fas fa-plus-square"></i>
+</button>
+<table id="members" class="table table-bordered">
+    <thead>
+        <tr>
+            <th>序</th>
+            <th>姓名</th>
+            <th>Email</th>
+            <th>年齡</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Member <span></span></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="addForm">
+                    <input type="hidden"  name="MemberId" id="MemberId">
+                    <div class="form-group">
+                        <label for="Name">姓名</label>
+                        <input type="text" class="form-control" id="Name" name="Name" placeholder="輸入姓名">
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">Email</label>
+                        <input type="text" class="form-control" id="Email" name="Email" placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="Age">年齡</label>
+                        <input type="text" class="form-control" id="Age" name="Age" placeholder="輸入年齡">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">關閉</button>
+                <button type="button" class="btn btn-primary" id="buttonSend">送出</button>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{ 
+<script>
+    const url = "https://localhost:7194/api/Members";
+    load();
+
+    //讀取資料
+    function load() {
+        const tbMember = $('#members>tbody')
+        $.getJSON(url, function (datas) {
+            const docFrag = $(document.createDocumentFragment())
+            $.each(datas, function (index, member) {
+                const cell1 = $(`<td data-memberid="${member.memberId}"></td>`).text(index+1);
+                const cell2 = $('<td></td>').text(member.name);
+                const cell3 = $('<td></td>').text(member.email);
+                const cell4 = $('<td></td>').text(member.age);
+                const cell5 = $('<td></td>').html('<button class="btn btn-secondary mr-3" data-bs-toggle="modal" data-bs-target="#addModal"><i class="fas fa-pen-nib"></i></button><button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>');
+
+                const row = $('<tr></tr>').append([cell1, cell2, cell3, cell4,cell5])
+                docFrag.append(row)
+            })
+            tbMember.html(docFrag)
+        })
+    }
+
+    $('#buttonSend').click(function () {
+        //隱藏欄位中有shipperID 的資料我們就是要做修改
+        const id = $('#MemberId').val()
+        if (id) {
+            //資料修改
+             const jsonData = JSON.stringify({ memberid: id, name: $('#Name').val(), email: $('#Email').val(), age: $('#Age').val(), fileName:null , fileData:null})
+            $.ajax({
+                url: url + "/" + id,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: jsonData
+            }).done(function (data) {
+                alert("修改成功")
+                load()
+                clearData()
+            })
+
+        } else {
+            //資料新增
+            const jsonData = JSON.stringify({ name: $('#Name').val(), email: $('#Email').val() ,age: $('#Age').val()})
+            // console.log(jsonData)
+            $.ajax({
+                url: url,
+                type: 'POST',
+                contentType: 'application/json',
+                data: jsonData
+            }).done(function (data) {
+                alert("新增成功")
+                load()
+                clearData()
+            })
+
+        }
+      
+        $('#addModal').modal('hide')
+    })
+
+    //編輯
+    //先將要修改的資料寫到Modal中
+    $('#members>tbody').on('click', 'button:nth-child(1)', function () {
+       // alert('編輯')
+        const memberId = $(this).parents('tr').find('td:nth-child(1)').data("memberid")
+        const name = $(this).parents('tr').find('td:nth-child(2)').text()
+        const email = $(this).parents('tr').find('td:nth-child(3)').text()
+        const age = $(this).parents('tr').find('td:nth-child(4)').text()
+
+        $('#MemberId').val(memberId)
+        $('#Name').val(name)
+        $('#Email').val(email)
+        $('#Age').val(age)
+
+    })
+
+    //刪除
+    $('#members>tbody').on('click', 'button:nth-child(2)', function () {
+        const id = $(this).parents('tr').find('td:first-child').data("memberid")
+            var r=confirm("確定刪除?");
+            if(r){
+        $.ajax({
+            url: url + "/" +  id,
+            type:'DELETE'
+        }).done(function (data) {
+            alert("刪除成功")
+            load()
+        })
+            }
+    })
+
+
+    function clearData() {
+        $('input').val("")
+    }
+
+</script>
+
+}
