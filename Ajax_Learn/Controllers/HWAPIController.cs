@@ -79,7 +79,51 @@ namespace Ajax_Learn.Controllers
         #endregion
 
         #region//作業2更新
+        public IActionResult Verf(Member m)
+        {
+            string s = "";
+            if (m.Name == null)
+                s = "null";
+            else
+            {
+                var datas = _db.Members.Any(t => t.Name == m.Name);
+                if (datas)
+                    s = "false";
+                else
+                    s = "true";
+            }
+            return Content(s, "text/html", Encoding.UTF8);
+        }
+        public IActionResult Sub(Member m, IFormFile photo)
+        {
+            string s = "";
+            if (m.Name == null || m.Email == null || m.Age == null)
+            {
+                s = "null";
+            }
+            else
+            {
+                s = "nophoto"; //判斷有沒有照片上傳
 
+                //檔案(圖片)存放
+                if (photo != null)
+                {
+                    s = "hasphoto";
+                    //存放檔案(圖片)路徑
+                    //圖片名稱用Guid方法取代
+                    string photoName = Guid.NewGuid().ToString() + ".png";
+                    string path = Path.Combine(_host.WebRootPath, "photos", photoName);
+                    using (var filesStream = new FileStream(path, FileMode.Create))
+                    {
+                        photo.CopyTo(filesStream);
+                    }
+                    m.FileName = photoName;
+                }               
+                _db.Add(m);
+                _db.SaveChanges();
+            }
+            return Content(s, "text/html", Encoding.UTF8);
+        }
         #endregion
 
         #region//作業3

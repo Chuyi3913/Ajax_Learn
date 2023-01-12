@@ -11,8 +11,7 @@
         <div class="mb-3 w-75">
             <label for="Name" class="form-label">姓名</label>
             <input type="text" name="Name" id="Name" class="form-control" placeholder="請輸入姓名" />
-            <div id="alert" class="mt-2"></div>
-            <button id="btn1" type="button" class="btn btn-light btn-sm mt-2">檢查可用性</button>
+            <div id="alert" class="mt-2"></div>          
         </div>
         <div class="mb-3 w-75">
             <label for="Email" class="form-label">Email</label>
@@ -24,46 +23,51 @@
         </div>
         <div class="mb-3 w-75">
             <label for="fileForm" class="form-label">照片上傳</label>
-            <input type="file" name="photo" id="fileForm" class="form-control" />
+            <input type="file" name="photo" id="photo" class="form-control" />
         </div>
         <div class="mb-3 w-75">
             <input id="btn2" type="button" value="送出" class="btn btn-primary mb-3" />
         </div>
     </form>
 
-    <div class="w-50" id="div1"></div>
-
+    <div class="w-50" id="div1">
+        
+    </div>
+    <img id="img"/>
 </div>
 
 @section Scripts{
-    <script>
-        const btn = $('#btn1');
+    <script>        
         const txtname=$("#Name");   //原來jQurey標籤選擇器有分大小寫
+        const txtemail=$("#Email");
+        const txtage=$("#Age");
+        const photoRead=$("#photo");
         const sub = $('#btn2');
         const remind = $("#alert");
         const info = $("#div1");
         let result = "";
-        $(btn).on("click", verify);
         $(txtname).on("blur", verify);
         $(sub).on("click", submit);
 
-            function verify() {     
-
+            function verify() {                    
             var formData = new FormData(document.formUser);
             $.ajax({
-                url: `@Url.Content("~/HWAPI/verify")`,
+                url: `@Url.Content("~/HWAPI/Verf")`,
                 type: "POST",               
                 data: formData,
                 dataType:"text",
                 contentType: false, //required
                 processData: false // required
-            }).done((data) => { 
+            }).done(verfname)
+        };
+        function verfname(data){                 
                 result =data;
                 let thDIV = "";
                 if (result === "null") {
                     thDIV = "<div class='alert-danger'>請輸入姓名</div>";
                 }
                 else if (result === "false") {
+                    console.log(data)
                     thDIV = "<div class='alert-danger'>此姓名已有人</div>";
                 }
                 else if (result === "true") {
@@ -72,26 +76,62 @@
                 else {
                     thDIV = "<div class='alert-danger'>發生錯誤</div>";
                 }
-                remind.innerHTML = thDIV;
-            })
-        };
+                remind.html(thDIV);
+            };
 
         function submit() {
-            if (result === "true") {
-                var xhr = new XMLHttpRequest();
-                var formData = new FormData(document.formUser);
-
-                xhr.addEventListener('load', () => {
-                    const data = xhr.responseText;
-                    info.innerHTML = data;
-                })
-
-                xhr.open("post", `@Url.Content("~/HWAPI/create")`)
-                xhr.send(formData);
-            }
-            else {
-                info.innerHTML = "請先驗證姓名";
-            }
+           const formData = new FormData(document.formUser);
+           //const fileRead= document.querySelector('#photo').files[0]
+           //console.log(URL.createObjectURL(fileRead));
+           //console.log(fileRead.size)
+           //console.log((fileRead.size/1024).toFixed(2))
+           //img.src = URL.createObjectURL(fileRead)
+            $.ajax({
+                url: `@Url.Content("~/HWAPI/Sub")`,
+                type: "POST",               
+                data: formData,
+                dataType:"text",
+                contentType: false, 
+                processData: false 
+            }).done((data) => { 
+                let thResult = "";
+                const name=txtname.val();
+                const email=txtemail.val();
+                const age=txtage.val();
+               if(data==="null"){
+                  thResult= "資料有誤或未填寫完畢";
+               }
+               else if(data==="nophoto"){
+                      thResult=`<div class='card' style='width: 18rem;'>
+                                    <div class='card-header'>請確認以下資料</div>
+                                    <ul class="list-group list-group-flush">
+                                       <li class=\"list-group-item\">姓名:${name}</li>
+                                       <li class=\"list-group-item\">Email:${email}</li>
+                                       <li class=\"list-group-item\">年齡:${age}</li>
+                                     </ul>
+                                 </div>`;
+               }
+               else if(data==="hasphoto"){
+                       const photo=photoRead.files[0];
+                       const photoname=photo.name;
+                       const photosize=(photo.size/1024).toFixed(2);
+                       thResult=`<div class='card' style='width: 18rem;'>
+                                        <div class='card-header'>請確認以下資料</div>
+                                        <ul class="list-group list-group-flush">
+                                            <li class=\"list-group-item\">姓名:${name}</li>
+                                            <li class=\"list-group-item\">Email:${email}</li>
+                                            <li class=\"list-group-item\">年齡:${age}</li>
+                                            <li class=\"list-group-item\">檔案名稱:${photoname}</li>
+                                            <li class=\"list-group-item\">檔案大小:${photosize}KB</li>
+                                         </ul>
+                                     </div>`;
+                       img.src = URL.createObjectURL(photo);
+               }
+               else{
+                       thResult= "發生錯誤";
+               }
+               info.html(thResult);
+            })
         };
 
     </script>
