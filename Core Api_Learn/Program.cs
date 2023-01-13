@@ -15,7 +15,11 @@ builder.Services.AddDbContext<DemoContext>(
  options => options.UseSqlServer(
  builder.Configuration.GetConnectionString(@"DemoConnection")
 ));
-
+//建立Database 普雷二電玩的dbContext
+builder.Services.AddDbContext<DemoContext>(
+ options => options.UseSqlServer(
+ builder.Configuration.GetConnectionString(@"普雷二電玩Connection")
+));
 //建立資料可以序列化成xml的方法
 builder.Services.AddControllers().AddXmlSerializerFormatters();
 

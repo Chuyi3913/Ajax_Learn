@@ -1,0 +1,1 @@
+Scaffold-DbContext "Data Source=.;Initial Catalog=普雷二電玩;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –Tables 顧客列表
