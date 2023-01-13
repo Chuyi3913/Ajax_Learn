@@ -33,7 +33,7 @@
     <div class="w-50" id="div1">
         
     </div>
-    <img id="img"/>
+   
 </div>
 
 @section Scripts{
@@ -45,12 +45,12 @@
         const sub = $('#btn2');
         const remind = $("#alert");
         const info = $("#div1");
-        let result = "";
+        let result="";
+        var formData = new FormData(document.formUser); 
         $(txtname).on("blur", verify);
         $(sub).on("click", submit);
 
-            function verify() {                    
-            var formData = new FormData(document.formUser);
+            function verify() {   
             $.ajax({
                 url: `@Url.Content("~/HWAPI/Verf")`,
                 type: "POST",               
@@ -58,34 +58,25 @@
                 dataType:"text",
                 contentType: false, //required
                 processData: false // required
-            }).done(verfname)
-        };
-        function verfname(data){                 
-                result =data;
+            }).done((data)=>{
                 let thDIV = "";
-                if (result === "null") {
+                if (data === "null") {
                     thDIV = "<div class='alert-danger'>請輸入姓名</div>";
                 }
-                else if (result === "false") {
-                    console.log(data)
+                else if (data === "false") {
                     thDIV = "<div class='alert-danger'>此姓名已有人</div>";
                 }
-                else if (result === "true") {
+                else if (data === "true") {
                     thDIV = "<div class='alert-success'>可以使用</div>";
                 }
                 else {
                     thDIV = "<div class='alert-danger'>發生錯誤</div>";
                 }
+                result=data;
                 remind.html(thDIV);
-            };
-
-        function submit() {
-           const formData = new FormData(document.formUser);
-           //const fileRead= document.querySelector('#photo').files[0]
-           //console.log(URL.createObjectURL(fileRead));
-           //console.log(fileRead.size)
-           //console.log((fileRead.size/1024).toFixed(2))
-           //img.src = URL.createObjectURL(fileRead)
+            })
+        };   
+        function sub(){
             $.ajax({
                 url: `@Url.Content("~/HWAPI/Sub")`,
                 type: "POST",               
@@ -94,44 +85,56 @@
                 contentType: false, 
                 processData: false 
             }).done((data) => { 
-                let thResult = "";
-                const name=txtname.val();
-                const email=txtemail.val();
-                const age=txtage.val();
                if(data==="null"){
-                  thResult= "資料有誤或未填寫完畢";
+                    alert("資料有誤或未填寫完畢");
                }
-               else if(data==="nophoto"){
-                      thResult=`<div class='card' style='width: 18rem;'>
-                                    <div class='card-header'>請確認以下資料</div>
-                                    <ul class="list-group list-group-flush">
-                                       <li class=\"list-group-item\">姓名:${name}</li>
-                                       <li class=\"list-group-item\">Email:${email}</li>
-                                       <li class=\"list-group-item\">年齡:${age}</li>
-                                     </ul>
-                                 </div>`;
-               }
-               else if(data==="hasphoto"){
-                       const photo=photoRead.files[0];
-                       const photoname=photo.name;
-                       const photosize=(photo.size/1024).toFixed(2);
-                       thResult=`<div class='card' style='width: 18rem;'>
-                                        <div class='card-header'>請確認以下資料</div>
-                                        <ul class="list-group list-group-flush">
-                                            <li class=\"list-group-item\">姓名:${name}</li>
-                                            <li class=\"list-group-item\">Email:${email}</li>
-                                            <li class=\"list-group-item\">年齡:${age}</li>
-                                            <li class=\"list-group-item\">檔案名稱:${photoname}</li>
-                                            <li class=\"list-group-item\">檔案大小:${photosize}KB</li>
-                                         </ul>
-                                     </div>`;
-                       img.src = URL.createObjectURL(photo);
-               }
+               else if (data === "success") {
+                    alert("上傳成功");
+               }              
                else{
-                       thResult= "發生錯誤";
+                    alert("發生錯誤");
                }
-               info.html(thResult);
             })
+        };
+        async function submit() {
+            const formData = new FormData(document.formUser);
+            const name = txtname.val();
+            const email = txtemail.val();
+            const age = txtage.val();
+            const photos = photoRead.files;
+            let thResult = "";
+            if(!photos){
+                  thResult = `<div class='card' style='width: 18rem;'>
+                                             <div class='card-header'>請確認以下資料</div>
+                                             <ul class="list-group list-group-flush">
+                                                  <li class="list-group-item">姓名:${name}</li>
+                                                  <li class="list-group-item">Email:${email}</li>
+                                                  <li class="list-group-item">年齡:${age}</li>
+                                             </ul>
+                                      </div>`;
+            }
+            else if (photos){
+                const photo = photoRead.files[0];
+                const photoname = photo.name;
+                const photosize = (photo.size / 1024).toFixed(2);
+                const imgsrc = URL.createObjectURL(photo);
+                  thResult = `<div class='card' style='width: 18rem;'>
+                                             <div class='card-header'>請確認以下資料</div>
+                                             <ul class="list-group list-group-flush">
+                                                  <li class="list-group-item">姓名:${name}</li>
+                                                  <li class="list-group-item">Email:${email}</li>
+                                                  <li class="list-group-item">年齡:${age}</li>
+                                                  <li class="list-group-item">檔案名稱:${photoname}</li>
+                                                  <li class="list-group-item">檔案大小:${photosize}KB</li>
+                                                  <li class="list-group-item"><img src="${imgsrc}"/></li>
+                                             </ul>
+                                      </div>`;
+             }
+            info.html(thResult);
+            await verify();
+            if(result==="true"){
+                await sub();
+            }
         };
 
     </script>

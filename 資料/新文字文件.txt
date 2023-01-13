@@ -1,1 +1,9 @@
-Scaffold-DbContext "Data Source=.;Initial Catalog=普雷二電玩;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models –Tables 顧客列表
+Scaffold-DbContext "Data Source=.;Initial Catalog=普雷二電玩;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables 商品列表 -force
+
+Microsoft.EntityFrameworkCore.Tools
+Microsoft.EntityFrameworkCore.SqlServer
+
+builder.Services.AddDbContext<普雷二電玩Context>(
+ options => options.UseSqlServer(
+ builder.Configuration.GetConnectionString(@"普雷二電玩")
+));

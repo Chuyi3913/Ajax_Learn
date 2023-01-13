@@ -103,12 +103,9 @@ namespace Ajax_Learn.Controllers
             }
             else
             {
-                s = "nophoto"; //判斷有沒有照片上傳
-
                 //檔案(圖片)存放
                 if (photo != null)
                 {
-                    s = "hasphoto";
                     //存放檔案(圖片)路徑
                     //圖片名稱用Guid方法取代
                     string photoName = Guid.NewGuid().ToString() + ".png";
@@ -121,6 +118,7 @@ namespace Ajax_Learn.Controllers
                 }               
                 _db.Add(m);
                 _db.SaveChanges();
+                s = "success";
             }
             return Content(s, "text/html", Encoding.UTF8);
         }
