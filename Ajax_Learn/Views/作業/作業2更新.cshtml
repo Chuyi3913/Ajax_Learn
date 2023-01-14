@@ -7,7 +7,7 @@
 
 
 <div class="d-flex">
-    <form method="post" name="formUser" class="w-50">
+    <form method="post" enctype="multipart/form-data" name="formUser" class="w-50">
         <div class="mb-3 w-75">
             <label for="Name" class="form-label">姓名</label>
             <input type="text" name="Name" id="Name" class="form-control" placeholder="請輸入姓名" />
@@ -42,15 +42,16 @@
         const txtemail=$("#Email");
         const txtage=$("#Age");
         const photoRead=$("#photo");
-        const sub = $('#btn2');
+        const subbtn = $('#btn2');
         const remind = $("#alert");
         const info = $("#div1");
         let result="";
-        var formData = new FormData(document.formUser); 
+        
         $(txtname).on("blur", verify);
-        $(sub).on("click", submit);
+        $(subbtn).on("click", submit);
 
             function verify() {   
+             var formData = new FormData(document.formUser); 
             $.ajax({
                 url: `@Url.Content("~/HWAPI/Verf")`,
                 type: "POST",               
@@ -77,6 +78,7 @@
             })
         };   
         function sub(){
+            var formData = new FormData(document.formUser);
             $.ajax({
                 url: `@Url.Content("~/HWAPI/Sub")`,
                 type: "POST",               
@@ -96,45 +98,46 @@
                }
             })
         };
-        async function submit() {
-            const formData = new FormData(document.formUser);
+         function submit() {
             const name = txtname.val();
             const email = txtemail.val();
             const age = txtage.val();
-            const photos = photoRead.files;
             let thResult = "";
-            if(!photos){
-                  thResult = `<div class='card' style='width: 18rem;'>
-                                             <div class='card-header'>請確認以下資料</div>
-                                             <ul class="list-group list-group-flush">
-                                                  <li class="list-group-item">姓名:${name}</li>
-                                                  <li class="list-group-item">Email:${email}</li>
-                                                  <li class="list-group-item">年齡:${age}</li>
-                                             </ul>
-                                      </div>`;
-            }
-            else if (photos){
+            console.log(photoRead);
+            if(photoRead.files == true){
+                console.log("photo");
                 const photo = photoRead.files[0];
                 const photoname = photo.name;
                 const photosize = (photo.size / 1024).toFixed(2);
                 const imgsrc = URL.createObjectURL(photo);
                   thResult = `<div class='card' style='width: 18rem;'>
+                                   <div class='card-header'>請確認以下資料</div>
+                                   <ul class="list-group list-group-flush">
+                                      <li class="list-group-item">姓名:${name}</li>
+                                      <li class="list-group-item">Email:${email}</li>
+                                      <li class="list-group-item">年齡:${age}</li>
+                                      <li class="list-group-item">檔案名稱:${photoname}</li>
+                                      <li class="list-group-item">檔案大小:${photosize}KB</li>
+                                      <li class="list-group-item"><img src="${imgsrc}"/></li>
+                                   </ul>
+                               </div>`;
+            }
+            else {
+                  console.log("nophoto");
+                  thResult = `<div class='card' style='width: 18rem;'>
                                              <div class='card-header'>請確認以下資料</div>
                                              <ul class="list-group list-group-flush">
                                                   <li class="list-group-item">姓名:${name}</li>
                                                   <li class="list-group-item">Email:${email}</li>
                                                   <li class="list-group-item">年齡:${age}</li>
-                                                  <li class="list-group-item">檔案名稱:${photoname}</li>
-                                                  <li class="list-group-item">檔案大小:${photosize}KB</li>
-                                                  <li class="list-group-item"><img src="${imgsrc}"/></li>
                                              </ul>
                                       </div>`;
              }
-            info.html(thResult);
-            await verify();
-            if(result==="true"){
-                await sub();
-            }
+            //info.html(thResult);
+            //await verify();
+            //if(result==="true"){
+            //    await sub();
+            //}
         };
 
     </script>
