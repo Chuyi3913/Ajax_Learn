@@ -1,9 +1,15 @@
-Scaffold-DbContext "Data Source=.;Initial Catalog=普雷二電玩;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Tables 商品列表 -force
+Scaffold-DbContext "Data Source=.;Initial Catalog=Play2;Integrated Security=True" Microsoft.EntityFrameworkCore.SqlServer -OutputDir EFModels -force
 
 Microsoft.EntityFrameworkCore.Tools
 Microsoft.EntityFrameworkCore.SqlServer
 
-builder.Services.AddDbContext<普雷二電玩Context>(
+"ConnectionStrings": {
+    "Play2": "Server=tcp:21-chinyi-server-text.database.windows.net,1433;Initial Catalog=Play2;Persist Security Info=False;User ID=SqlAdmin;Password=zxc!@#123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+    "Play2user": "Server=tcp:21-chinyi-server-text.database.windows.net,1433;Initial Catalog=Play2;Persist Security Info=False;User ID=theuser;Password=zxc<>?123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+    "Default": "Data Source=.;Initial Catalog=Play2;Integrated Security=True"
+  }
+
+builder.Services.AddDbContext<Play2Context>(
  options => options.UseSqlServer(
- builder.Configuration.GetConnectionString(@"普雷二電玩")
+ builder.Configuration.GetConnectionString(@"Play2")
 ));
